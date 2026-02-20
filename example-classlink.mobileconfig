@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PayloadContent</key>
+	<array>
+		<dict>
+			<key>PayloadDisplayName</key>
+			<string>XCreds</string>
+			<key>PayloadIdentifier</key>
+			<string>com.twocanoes.xcreds.CHANGE-ME</string>
+			<key>PayloadType</key>
+			<string>com.twocanoes.xcreds</string>
+			<key>PayloadUUID</key>
+			<string>CHANGE-ME-GENERATE-A-UUID</string>
+			<key>PayloadVersion</key>
+			<integer>1</integer>
+
+			<!-- ClassLink OIDC Settings -->
+			<key>discoveryURL</key>
+			<string>https://launchpad.classlink.com/.well-known/openid-configuration</string>
+			<key>clientID</key>
+			<string>YOUR_CLASSLINK_CLIENT_ID</string>
+			<key>clientSecret</key>
+			<string>YOUR_CLASSLINK_CLIENT_SECRET</string>
+
+			<!-- Redirect URI - See README for explanation. We used our school
+			     homepage because localhost/loopback options caused issues with
+			     ClassLink's domain verification. It doesn't matter what URL
+			     you use here as long as it matches what's in your ClassLink
+			     Developer app settings - the interceptor catches the redirect
+			     before the page actually loads. -->
+			<key>redirectURI</key>
+			<string>https://www.yourschool.org/</string>
+
+			<!-- ClassLink Tenant Patch Keys -->
+			<key>classLinkTenant</key>
+			<string>yourdistrict</string>
+			<key>classLinkTenantDisplayName</key>
+			<string>Your School District</string>
+
+			<!-- Password / Identity -->
+			<key>idpHostName</key>
+			<string>launchpad.classlink.com</string>
+			<key>passwordElementID</key>
+			<string>password</string>
+			<key>map_username</key>
+			<string>email</string>
+			<key>scopes</key>
+			<string>openid profile email offline_access</string>
+
+			<!-- Login Window Appearance (optional) -->
+			<key>loginWindowWidth</key>
+			<integer>500</integer>
+			<key>loginWindowHeight</key>
+			<integer>600</integer>
+
+			<!-- Behavior -->
+			<key>shouldSwitchToLoginWindowWhenLocked</key>
+			<true/>
+			<key>skipUserSetupBuddy</key>
+			<true/>
+			<key>shouldRemoveMenuItemAutoLaunch</key>
+			<true/>
+		</dict>
+	</array>
+	<key>PayloadDisplayName</key>
+	<string>XCreds ClassLink Configuration</string>
+	<key>PayloadIdentifier</key>
+	<string>CHANGE-ME-GENERATE-A-UUID</string>
+	<key>PayloadOrganization</key>
+	<string>Your Organization</string>
+	<key>PayloadType</key>
+	<string>Configuration</string>
+	<key>PayloadUUID</key>
+	<string>CHANGE-ME-GENERATE-A-UUID</string>
+	<key>PayloadVersion</key>
+	<integer>1</integer>
+</dict>
+</plist>
