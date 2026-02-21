@@ -2,6 +2,10 @@
 
 A modification to [XCreds](https://github.com/twocanoes/xcreds) (v5.6) that makes ClassLink work properly as an OIDC identity provider for macOS login.
 
+<img src="screenshot.png" alt="ClassLink login at macOS login window" width="800">
+
+*ClassLink tenant login screen running at the macOS login window via XCreds.*
+
 ## The Problem
 
 ClassLink's OIDC/OAuth2 implementation always redirects users to a generic "Find your login page" screen at `launchpad.classlink.com`, regardless of how you configure things. Users have to search for and select their district before they can log in.
