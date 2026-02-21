@@ -2,9 +2,7 @@
 
 A modification to [XCreds](https://github.com/twocanoes/xcreds) (v5.6) that makes ClassLink work properly as an OIDC identity provider for macOS login.
 
-<img src="screenshot.jpg" alt="ClassLink login at macOS login window" width="800">
-
-*ClassLink tenant login screen running at the macOS login window via XCreds.*
+<!-- REPLACE_WITH_SCREENSHOT: Paste your login window screenshot here via GitHub's web editor -->
 
 ## The Problem
 
