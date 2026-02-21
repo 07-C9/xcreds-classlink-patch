@@ -51,7 +51,7 @@ These are standard XCreds preferences, not specific to this patch:
 | `clientID` | Your ClassLink OIDC Client ID (from ClassLink Developer portal) |
 | `clientSecret` | Your ClassLink OIDC Client Secret |
 | `redirectURI` | The redirect URI configured in your ClassLink app (this is what the interceptor catches) |
-| `idpHostNames` | Include `launchpad.classlink.com` so password scraping works on the ClassLink login page |
+| `idpHostName` | Set to `launchpad.classlink.com` so password scraping works on the ClassLink login page |
 
 ### A note about the redirect URI
 
@@ -87,9 +87,11 @@ You need to be comfortable building Xcode projects. If you're K-12 education, th
 
 - **Based on XCreds v5.6.** Newer versions may have changes to WebViewController.swift that require merging.
 
-## Password Sync
+## Password Handling
 
-This patch handles the *login window* only. For ongoing password synchronization, we use Google LDAP separately. XCreds has a `PasswordOverwriteSilent` key that silently resets the keychain if the IdP password changes - avoids the "enter your old password" prompt, which is a huge quality-of-life improvement in K-12 shared environments.
+XCreds captures the password from the ClassLink login form at each login and sets the local account password to match. There's no ongoing real-time password sync while the user is logged in - the local password updates the next time they log in. For shared labs and K-12 environments this is usually fine.
+
+XCreds also has a `PasswordOverwriteSilent` preference key that can silently reset the keychain if the IdP password has changed since the last login - worth looking into if students forgetting their previous password is a headache for you.
 
 ## Credits
 
