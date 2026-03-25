@@ -268,6 +268,18 @@ class WebViewController: NSViewController, TokenManagerFeedbackDelegate, WKNavig
                 return
             }
 
+            // Optional override for the ClassLink search bar text. Use when the
+            // tenant code doesn't match what ClassLink's search expects (e.g.,
+            // tenant code "pausd" but search only finds "Palo Alto").
+            let rawSearchTerm = DefaultsOverride.standardOverride.string(forKey: "classLinkSearchTerm")
+            let safeSearchTerm: String
+            if let rawSearchTerm = rawSearchTerm, !rawSearchTerm.isEmpty {
+                let filtered = rawSearchTerm.filter { $0.isLetter || $0.isNumber || $0 == "-" || $0 == "_" || $0 == " " }
+                safeSearchTerm = filtered.isEmpty ? safeTenant : filtered
+            } else {
+                safeSearchTerm = safeTenant
+            }
+
             let isClassLink = url.contains("launchpad.classlink.com")
             let isAlreadyOnTenant = url.contains(safeTenant)
             let isMFA = url.contains("twoformauth")
@@ -275,10 +287,10 @@ class WebViewController: NSViewController, TokenManagerFeedbackDelegate, WKNavig
 
             if isClassLink && !isAlreadyOnTenant && !isMFA && !isProcessingAuth {
 
-                let rawDisplayName = DefaultsOverride.standardOverride.string(forKey: "classLinkTenantDisplayName") ?? safeTenant
+                let rawDisplayName = DefaultsOverride.standardOverride.string(forKey: "classLinkTenantDisplayName") ?? safeSearchTerm
                 let safeDisplayName = rawDisplayName.filter { $0.isLetter || $0.isNumber || $0 == "-" || $0 == "_" || $0 == " " }
 
-                TCSLogWithMark("ClassLink tenant injection: navigating to \(safeTenant)")
+                TCSLogWithMark("ClassLink tenant injection: navigating to \(safeTenant) (search: \(safeSearchTerm))")
 
                 let js = """
                 (function() {
@@ -304,7 +316,7 @@ class WebViewController: NSViewController, TokenManagerFeedbackDelegate, WKNavig
 
                     waitFor('.search-bar-input', function(input) {
                         var setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
-                        setter.call(input, "\(safeTenant)");
+                        setter.call(input, "\(safeSearchTerm)");
                         input.dispatchEvent(new Event('input', { bubbles: true }));
                         input.dispatchEvent(new Event('change', { bubbles: true }));
                         input.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true }));
@@ -316,7 +328,7 @@ class WebViewController: NSViewController, TokenManagerFeedbackDelegate, WKNavig
                             } else {
                                 var headers = document.querySelectorAll('.item-header');
                                 for (var i = 0; i < headers.length; i++) {
-                                    if (headers[i].textContent.toLowerCase().includes('\(safeTenant.lowercased())')) {
+                                    if (headers[i].textContent.toLowerCase().includes('\(safeSearchTerm.lowercased())')) {
                                         headers[i].click();
                                         break;
                                     }
