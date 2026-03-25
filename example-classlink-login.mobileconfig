@@ -33,15 +33,28 @@
 			<key>redirectURI</key>
 			<string>https://www.yourschool.org/</string>
 
-			<!-- ClassLink Tenant Patch Keys -->
+			<!-- ClassLink Tenant Patch Keys
+			     IMPORTANT: If your district can't be found by typing your
+			     tenant code into ClassLink's search page, you need
+			     classLinkSearchTerm. Go to launchpad.classlink.com and
+			     try searching your tenant code. If it doesn't find your
+			     district, try your district name instead and set
+			     classLinkSearchTerm to whatever text works. -->
 			<key>classLinkTenant</key>
 			<string>yourdistrict</string>
+			<key>classLinkSearchTerm</key>
+			<string>Your District Name</string>
 			<key>classLinkTenantDisplayName</key>
 			<string>Your School District</string>
 
-			<!-- Password / Identity -->
+			<!-- Password / Identity
+			     IMPORTANT: For login.classlink.com districts, idpHostName
+			     MUST be login.classlink.com (not launchpad.classlink.com).
+			     The password form lives on login.classlink.com after the
+			     redirect. If this is wrong, login will still work but local
+			     password sync will silently fail. -->
 			<key>idpHostName</key>
-			<string>launchpad.classlink.com</string>
+			<string>login.classlink.com</string>
 			<key>passwordElementID</key>
 			<string>password</string>
 			<key>map_username</key>
@@ -65,7 +78,7 @@
 		</dict>
 	</array>
 	<key>PayloadDisplayName</key>
-	<string>XCreds ClassLink Configuration</string>
+	<string>XCreds ClassLink Configuration (login.classlink.com)</string>
 	<key>PayloadIdentifier</key>
 	<string>CHANGE-ME-GENERATE-A-UUID</string>
 	<key>PayloadOrganization</key>
