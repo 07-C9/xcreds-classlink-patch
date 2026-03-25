@@ -36,12 +36,26 @@ The user never sees the generic search page. They just see a brief loading spinn
 
 ## Configuration
 
-This patch adds two custom preference keys (set via MDM profile alongside your other XCreds preferences):
+### Which type of ClassLink URL does your district use?
+
+ClassLink has two URL styles for district login pages. **Check which one your district uses before configuring** - it affects both the patch settings and standard XCreds settings.
+
+| URL Style | Example | Status |
+|-----------|---------|--------|
+| **Launchpad** (most districts) | `launchpad.classlink.com/yourdistrict` | Tested in production (~500 Macs) |
+| **Login** (districts with passkeys enabled) | `login.classlink.com/my/yourdistrict` | **Experimental - untested in production** |
+
+To check: visit `launchpad.classlink.com/yourdistrict` in a browser. If it stays on `launchpad.classlink.com`, you have the Launchpad style. If it redirects to `login.classlink.com/my/yourdistrict`, you have the Login style.
+
+### Patch preference keys
 
 | Key | Type | Required | Description |
 |-----|------|----------|-------------|
-| `classLinkTenant` | String | Yes | Your ClassLink tenant code. This is the slug after `launchpad.classlink.com/` in your district's login URL. For example, if your login page is `launchpad.classlink.com/mydistrict`, set this to `mydistrict`. |
-| `classLinkTenantDisplayName` | String | No | Friendly name shown on the loading overlay. Defaults to the tenant code if not set. Example: `My School District` |
+| `classLinkTenant` | String | Yes | Your ClassLink tenant code. This is the slug in your district's login URL - the part after `launchpad.classlink.com/` or `login.classlink.com/my/`. For example, if your login page is `launchpad.classlink.com/mydistrict` or `login.classlink.com/my/mydistrict`, set this to `mydistrict`. |
+| `classLinkTenantDisplayName` | String | No | Friendly name shown on the loading overlay. Defaults to the search term (or tenant code if no search term is set). Example: `My School District` |
+| `classLinkSearchTerm` | String | No | **Use this when your tenant code doesn't work as a ClassLink search term.** Some districts can't be found by searching their tenant code on ClassLink's search page - only the district name works (e.g., tenant code is `pausd` but you have to search `Palo Alto`). Set this to whatever text successfully finds your district on the ClassLink search page. If your tenant code works as a search term, you don't need this key. |
+
+**How to check if you need `classLinkSearchTerm`:** Go to `launchpad.classlink.com` and type your tenant code into the search bar. If your district shows up, you don't need it. If it doesn't, try your district name instead - if that works, set `classLinkSearchTerm` to whatever text found your district.
 
 ### Standard XCreds keys you'll also need
 
@@ -53,7 +67,19 @@ These are standard XCreds preferences, not specific to this patch:
 | `clientID` | Your ClassLink OIDC Client ID (from ClassLink Developer portal) |
 | `clientSecret` | Your ClassLink OIDC Client Secret |
 | `redirectURI` | The redirect URI configured in your ClassLink app (this is what the interceptor catches) |
-| `idpHostName` | Set to `launchpad.classlink.com` so password scraping works on the ClassLink login page |
+| `idpHostName` | **Depends on your URL style.** See below. |
+
+**Important - `idpHostName` must match where your login form actually lives:**
+
+- **Launchpad style** (`launchpad.classlink.com/yourdistrict`): set `idpHostName` to `launchpad.classlink.com`
+- **Login style** (`login.classlink.com/my/yourdistrict`): set `idpHostName` to `login.classlink.com`
+
+XCreds uses `idpHostName` to identify which page has the password form for local password sync. If this doesn't match the domain where you actually type your password, the password will not be captured and local password sync will silently fail. Your login will still work, but the local account password won't update to match the cloud password.
+
+### Example configuration profiles
+
+- **`example-classlink.mobileconfig`** - For Launchpad-style districts (`launchpad.classlink.com/yourdistrict`). Tested in production.
+- **`example-classlink-login.mobileconfig`** - For Login-style districts (`login.classlink.com/my/yourdistrict`). Experimental/untested. Includes `classLinkSearchTerm` example.
 
 ### A note about the redirect URI
 
@@ -70,7 +96,7 @@ Just make sure the `redirectURI` in your XCreds config profile matches exactly w
 3. Set the redirect URI to match what you'll put in the XCreds config profile
 4. Note your Client ID and Client Secret
 
-See `example-classlink.mobileconfig` in this repo for a complete example configuration profile.
+See the example `.mobileconfig` files in this repo for complete configuration profiles (one for each URL style).
 
 ## How to Use
 
