@@ -38,6 +38,13 @@
 			<string>yourdistrict</string>
 			<key>classLinkTenantDisplayName</key>
 			<string>Your School District</string>
+			<!-- Optional: Override the ClassLink search term when the tenant
+			     code doesn't match what ClassLink's search expects. For
+			     example, tenant code "pausd" but ClassLink only finds
+			     "Palo Alto". Omit this key if your tenant code works as
+			     a search term (most districts). -->
+			<!-- <key>classLinkSearchTerm</key> -->
+			<!-- <string>Palo Alto</string> -->
 
 			<!-- Password / Identity -->
 			<key>idpHostName</key>
