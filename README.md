@@ -1,6 +1,8 @@
 # XCreds ClassLink Tenant Patch
 
-A modification to [XCreds](https://github.com/twocanoes/xcreds) (v5.6) that makes ClassLink work properly as an OIDC identity provider for macOS login.
+A modification to [XCreds](https://github.com/twocanoes/xcreds) that makes ClassLink work properly as an OIDC identity provider for macOS login.
+
+> **Breaking change in XCreds 5.9:** The `getToken()` API added a required `basicAuth` parameter. The `WebViewController.swift` in this repo is based on **XCreds 5.9** (build 9123) and is **not compatible with XCreds 5.6**. If you need the 5.6 version, check the git history for the previous commit.
 
 <img width="1919" height="1080" alt="xcreds" src="https://github.com/user-attachments/assets/0112d6e7-033b-4919-b74f-c502809e7d36" />
 
@@ -100,12 +102,15 @@ See the example `.mobileconfig` files in this repo for complete configuration pr
 
 ## How to Use
 
-1. Get the XCreds v5.6 source code from the [XCreds GitHub repo](https://github.com/twocanoes/xcreds)
-2. Replace `XCreds/WebViewController.swift` with the version from this repo
-3. Compile and sign with your Apple Developer certificate
-4. Deploy with the preference keys above via your MDM
+1. Get the XCreds v5.9 source code from the [XCreds GitHub repo](https://github.com/twocanoes/xcreds)
+2. Initialize the `tcsopensourcetools` git submodule (required for building): `git clone https://bitbucket.org/twocanoes/tcsopensourcetools.git tcsopensourcetools/`
+3. Replace `XCreds/WebViewController.swift` with the version from this repo
+4. Compile and sign with your Apple Developer certificate
+5. Deploy with the preference keys above via your MDM
 
 You need to be comfortable building Xcode projects. If you're K-12 education, the $99/year Apple Developer Program fee is waived.
+
+See [GitHub Issue #107](https://github.com/twocanoes/xcreds/issues/107) on the XCreds repo for community build instructions.
 
 ## Limitations
 
@@ -113,7 +118,7 @@ You need to be comfortable building Xcode projects. If you're K-12 education, th
 
 - **No automatic updates.** You're compiling XCreds yourself, so you need to manually check for new XCreds releases and re-apply this patch.
 
-- **Based on XCreds v5.6.** Newer versions may have changes to WebViewController.swift that require merging.
+- **Based on XCreds v5.9 (build 9123).** Newer versions may have changes to WebViewController.swift that require merging. This version is not compatible with XCreds 5.6 due to the `getToken()` API change (added `basicAuth` parameter).
 
 ## Password Handling
 
