@@ -102,15 +102,10 @@ See the example `.mobileconfig` files in this repo for complete configuration pr
 
 ## How to Use
 
-1. Get the XCreds v5.9 source code from the [XCreds GitHub repo](https://github.com/twocanoes/xcreds)
-2. Initialize the `tcsopensourcetools` git submodule (required for building): `git clone https://bitbucket.org/twocanoes/tcsopensourcetools.git tcsopensourcetools/`
-3. Replace `XCreds/WebViewController.swift` with the version from this repo
-4. Compile and sign with your Apple Developer certificate
-5. Deploy with the preference keys above via your MDM
-
-You need to be comfortable building Xcode projects. If you're K-12 education, the $99/year Apple Developer Program fee is waived.
-
-See [GitHub Issue #107](https://github.com/twocanoes/xcreds/issues/107) on the XCreds repo for community build instructions.
+1. Get the XCreds source code from the [XCreds GitHub repo](https://github.com/twocanoes/xcreds) and follow Twocanoes' build instructions
+2. Replace `XCreds/WebViewController.swift` with the version from this repo
+3. Compile and sign with your Apple Developer certificate
+4. Deploy with the preference keys above via your MDM
 
 ## Limitations
 
