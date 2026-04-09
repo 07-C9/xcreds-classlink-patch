@@ -102,7 +102,7 @@ See the example `.mobileconfig` files in this repo for complete configuration pr
 
 ## How to Use
 
-Replace `XCreds/WebViewController.swift` with the version from this repo and deploy with the preference keys above via your MDM.
+Replace `XCreds/WebViewController.swift` with the version from this repo and deploy with the preference keys above via your MDM. Compiling and signing are required but not covered here.
 
 ## Limitations
 
