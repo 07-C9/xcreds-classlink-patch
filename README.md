@@ -102,10 +102,7 @@ See the example `.mobileconfig` files in this repo for complete configuration pr
 
 ## How to Use
 
-1. Get the XCreds source code from the [XCreds GitHub repo](https://github.com/twocanoes/xcreds) and follow Twocanoes' build instructions
-2. Replace `XCreds/WebViewController.swift` with the version from this repo
-3. Compile and sign with your Apple Developer certificate
-4. Deploy with the preference keys above via your MDM
+Replace `XCreds/WebViewController.swift` with the version from this repo and deploy with the preference keys above via your MDM.
 
 ## Limitations
 
