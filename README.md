@@ -45,9 +45,22 @@ ClassLink has two URL styles for district login pages. **Check which one your di
 | URL Style | Example | Status |
 |-----------|---------|--------|
 | **Launchpad** (most districts) | `launchpad.classlink.com/yourdistrict` | Tested in production (~500 Macs) |
-| **Login** (districts with passkeys enabled) | `login.classlink.com/my/yourdistrict` | **Experimental - untested in production** |
+| **Login** (districts with passkeys enabled) | `login.classlink.com/my/yourdistrict` | **Known not working** - see below |
 
 To check: visit `launchpad.classlink.com/yourdistrict` in a browser. If it stays on `launchpad.classlink.com`, you have the Launchpad style. If it redirects to `login.classlink.com/my/yourdistrict`, you have the Login style.
+
+### Login-style districts: known incompatibility
+
+This patch does not currently work for districts whose ClassLink tenant has been migrated to the `login.classlink.com` URL style (typically triggered by enabling passkey login).
+
+**Verified infrastructure facts:**
+
+- `https://login.classlink.com/.well-known/openid-configuration` does not serve an OIDC discovery document. It returns the SPA HTML shell (`Content-Type: text/html`), not JSON.
+- `https://launchpad.classlink.com/.well-known/openid-configuration` is the only OIDC discovery endpoint in ClassLink's infrastructure. Its `issuer`, `authorization_endpoint`, `token_endpoint`, and `jwks_uri` claims all point to `launchpad.classlink.com`.
+
+**Field report:** a district whose ClassLink tenant had been migrated to `login.classlink.com` attempted this patch and reported authentication succeeding but token exchange failing afterward. No migrated districts have reported success.
+
+If your district has been migrated to `login.classlink.com`, there is no known working configuration for this patch. Consider opening a ticket with ClassLink support asking about OIDC endpoint availability on `login.classlink.com`. If you find a workaround, please open an issue.
 
 ### Patch preference keys
 
@@ -74,14 +87,13 @@ These are standard XCreds preferences, not specific to this patch:
 **Important - `idpHostName` must match where your login form actually lives:**
 
 - **Launchpad style** (`launchpad.classlink.com/yourdistrict`): set `idpHostName` to `launchpad.classlink.com`
-- **Login style** (`login.classlink.com/my/yourdistrict`): set `idpHostName` to `login.classlink.com`
+- **Login style** (`login.classlink.com/my/yourdistrict`): :warning: **not supported** - see [Login-style districts: known incompatibility](#login-style-districts-known-incompatibility) above. Do not deploy.
 
 XCreds uses `idpHostName` to identify which page has the password form for local password sync. If this doesn't match the domain where you actually type your password, the password will not be captured and local password sync will silently fail. Your login will still work, but the local account password won't update to match the cloud password.
 
-### Example configuration profiles
+### Example configuration profile
 
 - **`example-classlink.mobileconfig`** - For Launchpad-style districts (`launchpad.classlink.com/yourdistrict`). Tested in production.
-- **`example-classlink-login.mobileconfig`** - For Login-style districts (`login.classlink.com/my/yourdistrict`). Experimental/untested. Includes `classLinkSearchTerm` example.
 
 ### A note about the redirect URI
 
@@ -98,7 +110,7 @@ Just make sure the `redirectURI` in your XCreds config profile matches exactly w
 3. Set the redirect URI to match what you'll put in the XCreds config profile
 4. Note your Client ID and Client Secret
 
-See the example `.mobileconfig` files in this repo for complete configuration profiles (one for each URL style).
+See `example-classlink.mobileconfig` in this repo for a complete configuration profile.
 
 ## How to Use
 
